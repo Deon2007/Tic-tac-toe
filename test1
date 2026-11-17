@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 char board[3][3];//tic tac board
-char currentplayer = 'X';
+char current_player = 'X';
 
 void  setup_board()
 {
@@ -31,8 +31,100 @@ void make_board()
         }
 }
 
-void main()
+int if_win()
+{
+   for(int i =0;i<3;i++)
+   {
+       if(board[i][0]==board[i][1]&&board[i][1]==board[i][2])
+       {
+           return 1 ; //row win   
+       }   
+       else if(board[0][i]==board[1][i]&&board[1][i]==board[2][i])
+       {
+           return 1; //colum win
+       }
+   }
+   if(board[0][0]==board[1][1]&&board[1][1]==board[2][2])
+    {
+        return 1; //diagonal win   
+    }
+   if(board[0][2]==board[1][1]&&board[1][1]==board[2][0])
+    {
+        return 1; //diagonal win   
+    }
+   return 0;
+}
+
+int is_draw()
+{
+    for(int i=0;i<3;i++)
+        for(int j=0;j<3;j++)
+            {
+                if(board[i][j]>='1'&&board[i][j]<='9')
+                {
+                    return 0; //there are  empty slot
+                }
+                
+            }
+    return 1 ;//they are no empty slot
+    
+}
+
+void make_move()
+{
+    int move;
+    printf("\nPlayer %c, enter the move(1-9):",current_player);
+    scanf("%d",&move);
+    if (move<1 || move>9)
+    {
+        printf("Invalid move! Please try again\n");
+        make_move();
+        return;
+    }
+    int row=(move-1)/3, colum=(move-1)%3;
+    if(board[row][colum]=='X'|| board[row][colum]=='O')
+    {
+        printf("This spot already taken! Please try agin\n");
+        make_move();
+    }else
+    {
+        board[row][colum]=current_player;
+    }
+}
+
+void switch_player()
+    {
+        current_player=(current_player=='X')?'O':'X';
+    }
+
+
+
+
+int main()
 {
    setup_board();
-   make_board();
+   
+   int game_won=0;
+   while(!game_won&&!is_draw())
+   {
+       make_board();
+       make_move();  
+       game_won = if_win();
+       if(! game_won)
+       {
+           switch_player();
+       }
+       
+   }
+    make_board();
+if(game_won)
+{
+    printf("\nPlayer %c wins!\n",current_player);   
 }
+    else
+{
+  printf("\nIts a draw\n");      
+    }
+    return 0;
+}
+
