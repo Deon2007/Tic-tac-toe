@@ -30,3 +30,9 @@ void make_board()
            printf("\n --*---*--\n");//make a design after a row
         }
 }
+
+void main()
+{
+   setup_board();
+   make_board();
+}
